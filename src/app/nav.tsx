@@ -4,27 +4,40 @@ import { useEffect, useRef, useState } from "react";
 export default function Nav() {
   const navOpenTextRef = useRef<HTMLSpanElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
+  const navButtonRef = useRef<HTMLButtonElement>(null);
+  const rightCursor = ["border-r-2", "border-r-slate-300"];
+  const leftCursor = ["border-l-2", "border-l-slate-300"];
   let isOpen = false;
   let isCursor = false;
   let isTyping = false;
+  let cursorInterval: NodeJS.Timeout | undefined;
+
+  function startCursor(cursorClasses: string[]): NodeJS.Timeout {
+    clearInterval(cursorInterval);
+    if (!navOpenTextRef.current) {
+      throw Error(`no nav text ref`);
+    }
+    isCursor = true;
+    navOpenTextRef.current.classList.remove(...rightCursor, ...leftCursor);
+    navOpenTextRef.current.classList.add(...cursorClasses);
+    return setInterval(() => {
+      if (!navOpenTextRef.current) {
+        throw Error(`no nav text ref`);
+      }
+      isCursor = !isCursor;
+      if (isCursor) {
+        navOpenTextRef.current.classList.add(...cursorClasses);
+        return;
+      }
+      navOpenTextRef.current.classList.remove(...rightCursor, ...leftCursor);
+    }, 750);
+  }
 
   function toggleNav() {
     if (isTyping) {
       return;
     }
     isTyping = true;
-    if (!navOpenTextRef.current) {
-      throw Error(`no nav text ref`);
-    }
-
-    // generators
-    function* deleteChars() {
-      let isOpenStr = JSON.stringify(isOpen);
-      for (let i = isOpenStr.length; i-- > 0; ) {
-        yield isOpenStr.substring(0, i);
-      }
-    }
-    const delCharGenerator = deleteChars();
 
     function* typeChars() {
       for (const c of JSON.stringify(isOpen)) {
@@ -33,37 +46,42 @@ export default function Nav() {
     }
     const charGenerator = typeChars();
 
-    // using generators in intervals
-    // delete chars first
-    // then call type chars.
+    doDeleteChars();
+
     function doDeleteChars() {
-      const deleteCharsInterval = setInterval(() => {
-        const { value, done } = delCharGenerator.next();
-        if (done) {
-          clearInterval(deleteCharsInterval);
-          isOpen = !isOpen;
-          setTimeout(() => {
-            doTypeChars();
-          }, 50);
-          return;
-        }
+      if (!navOpenTextRef.current) {
+        throw Error(`no nav text ref`);
+      }
+      navOpenTextRef.current.classList.add("bg-slate-700");
+      cursorInterval = startCursor(leftCursor);
+      setTimeout(() => {
         if (!navOpenTextRef.current) {
           throw Error(`no nav text ref`);
         }
-        navOpenTextRef.current.innerText = value;
-      }, 60);
+        navOpenTextRef.current.innerText = "";
+        navOpenTextRef.current.classList.remove("bg-slate-700");
+        cursorInterval = startCursor(rightCursor);
+        setTimeout(() => {
+          isOpen = !isOpen;
+          doTypeChars();
+        }, 100);
+      }, 125);
     }
-
-    doDeleteChars();
 
     function doTypeChars() {
       const typeCharsInterval = setInterval(() => {
         const { value, done } = charGenerator.next();
         if (done) {
           clearInterval(typeCharsInterval);
-          //   if (isOpen) {
-          //     navRef.current?.classList.remove("hidden");
-          //   }
+          if (isOpen) {
+            navRef.current?.classList.remove("hidden");
+            navButtonRef.current?.classList.add("rounded-t-lg");
+            navButtonRef.current?.classList.remove("rounded-lg");
+          } else {
+            navRef.current?.classList.add("hidden");
+            navButtonRef.current?.classList.add("rounded-lg");
+            navButtonRef.current?.classList.remove("rounded-t-lg");
+          }
           isTyping = false;
           return;
         }
@@ -76,19 +94,7 @@ export default function Nav() {
   }
 
   useEffect(() => {
-    const cursorInterval = setInterval(() => {
-      if (!navOpenTextRef.current) {
-        throw Error(`no nav text ref`);
-      }
-      isCursor = !isCursor;
-      if (isCursor) {
-        navOpenTextRef.current.classList.add("border-r-2");
-        navOpenTextRef.current.classList.add("border-r-slate-300");
-        return;
-      }
-      navOpenTextRef.current.classList.remove("border-r-2");
-      navOpenTextRef.current.classList.remove("border-r-slate-300");
-    }, 750);
+    cursorInterval = startCursor(rightCursor);
     return () => {
       clearInterval(cursorInterval);
     };
@@ -98,8 +104,9 @@ export default function Nav() {
     <div className=" relative">
       <button
         style={{ textAlign: "left" }}
-        className="text-sm text-sky-300 bg-slate-800 rounded-lg p-2 w-28"
+        className="text-sm text-sky-300 bg-slate-800 rounded-lg p-2 w-28 h-28"
         onClick={() => toggleNav()}
+        ref={navButtonRef}
       >
         <span className=" text-yellow-400">{"{"}</span>
         <br />
@@ -119,7 +126,7 @@ export default function Nav() {
         <span className=" text-yellow-400">{"}"}</span>
       </button>
       <nav
-        className=" absolute "
+        className=" hidden absolute bg-slate-800 rounded-b-lg w-28 top-28 right-0"
         ref={navRef}
       >
         <ul>
