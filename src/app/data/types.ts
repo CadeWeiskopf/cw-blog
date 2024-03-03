@@ -1,0 +1,3 @@
+type BlogPost = {
+  slug: string;
+};
