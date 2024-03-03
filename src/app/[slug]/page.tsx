@@ -1,5 +1,7 @@
 "use server";
 
+import { getBlogPost } from "../data/data";
+
 export default async function BlogPost({
   params,
   searchParams,
@@ -7,9 +9,12 @@ export default async function BlogPost({
   params: { slug: string };
   searchParams: unknown;
 }) {
-  return (
-    <div>
-      My Post: {params.slug} {JSON.stringify(searchParams)}
-    </div>
-  );
+  const post = await getBlogPost(params.slug);
+  if (!post) {
+    return <>404</>;
+  }
+  if (!post.component) {
+    return <>coming soon</>;
+  }
+  return post.component;
 }

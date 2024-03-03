@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { BlogPost } from "@/app/data/data";
 
 export default function Nav({ posts }: { posts: BlogPost[] }) {
   const navOpenTextRef = useRef<HTMLSpanElement>(null);

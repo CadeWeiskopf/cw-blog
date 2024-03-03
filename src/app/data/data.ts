@@ -1,16 +1,20 @@
+import Prism from "prismjs";
+import { blogPosts } from "./mock";
+
+type CodeBlocks = {
+  id: string;
+  content: string;
+};
+export type BlogPost = {
+  title: string;
+  slug: string;
+  component?: JSX.Element;
+};
+
 export async function getBlogPosts(): Promise<BlogPost[]> {
-  return [
-    {
-      title: "JS Generator Functions",
-      slug: "js-generator-functions",
-    },
-    {
-      title: "Test",
-      slug: "test",
-    },
-    {
-      title: "Penguins are moving to the North Pole",
-      slug: "penguins-are-moving-towards-the-north-pole",
-    },
-  ];
+  return blogPosts;
+}
+
+export async function getBlogPost(slug: string): Promise<BlogPost | undefined> {
+  return blogPosts.find((e) => e.slug === slug);
 }
