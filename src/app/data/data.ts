@@ -1,3 +1,16 @@
-async function getBlogPosts(): Promise<BlogPost[]> {
-  return new Array(10).map((v, i) => ({ slug: `slug-${i}` }));
+export async function getBlogPosts(): Promise<BlogPost[]> {
+  return [
+    {
+      title: "JS Generator Functions",
+      slug: "js-generator-functions",
+    },
+    {
+      title: "Test",
+      slug: "test",
+    },
+    {
+      title: "Penguins are moving to the North Pole",
+      slug: "penguins-are-moving-towards-the-north-pole",
+    },
+  ];
 }

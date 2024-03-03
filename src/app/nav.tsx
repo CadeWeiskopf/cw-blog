@@ -1,7 +1,8 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-export default function Nav() {
+export default function Nav({ posts }: { posts: BlogPost[] }) {
   const navOpenTextRef = useRef<HTMLSpanElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
   const navButtonRef = useRef<HTMLButtonElement>(null);
@@ -75,10 +76,18 @@ export default function Nav() {
           clearInterval(typeCharsInterval);
           if (isOpen) {
             navRef.current?.classList.remove("hidden");
+            setTimeout(() => {
+              navRef.current?.classList.remove("w-0");
+              navRef.current?.classList.add("w-64");
+            });
             navButtonRef.current?.classList.add("rounded-t-lg");
             navButtonRef.current?.classList.remove("rounded-lg");
           } else {
-            navRef.current?.classList.add("hidden");
+            navRef.current?.classList.remove("w-64");
+            navRef.current?.classList.add("w-0");
+            setTimeout(() => {
+              navRef.current?.classList.add("hidden");
+            }, 500);
             navButtonRef.current?.classList.add("rounded-lg");
             navButtonRef.current?.classList.remove("rounded-t-lg");
           }
@@ -104,7 +113,7 @@ export default function Nav() {
     <div className=" relative">
       <button
         style={{ textAlign: "left" }}
-        className="text-sm text-sky-300 bg-slate-800 rounded-lg p-2 w-28 h-28"
+        className=" text-sky-300 bg-slate-800 rounded-lg p-2 w-36 h-36"
         onClick={() => toggleNav()}
         ref={navButtonRef}
       >
@@ -126,16 +135,35 @@ export default function Nav() {
         <span className=" text-yellow-400">{"}"}</span>
       </button>
       <nav
-        className=" hidden absolute bg-slate-800 rounded-b-lg w-28 top-28 right-0"
+        style={{ transition: "750ms" }}
+        className=" hidden absolute text-sky-300 bg-slate-800 rounded-b-lg rounded-tl-lg top-36 right-0 w-0 p-2 transition text-nowrap whitespace-nowrap"
         ref={navRef}
       >
+        <span className=" text-yellow-400">{"{"}</span>
+        <br />
+        <h2>
+          &ensp;{"posts: "}
+          <span className=" text-pink-400">{"["}</span>
+        </h2>
         <ul>
-          <li className=" text-slate-50">test</li>
-          <li className=" text-slate-50">test</li>
-          <li className=" text-slate-50">test</li>
-          <li className=" text-slate-50">test</li>
-          <li className=" text-slate-50">test</li>
+          {posts.map((post, i) => (
+            <li
+              key={`${post.slug}`}
+              className=" text-slate-50 overflow-hidden text-ellipsis"
+            >
+              &ensp;&ensp;&ensp;
+              <Link href={post.slug}>
+                <span className=" text-amber-500">"{post.title}"</span>
+                {i + 1 < posts.length && (
+                  <span className=" text-slate-200">,</span>
+                )}
+              </Link>
+            </li>
+          ))}
         </ul>
+        &ensp;&ensp;<span className=" text-pink-400">{"]"}</span>
+        <br />
+        <span className=" text-yellow-400">{"}"}</span>
       </nav>
     </div>
   );
