@@ -9,6 +9,7 @@ export default async function JsGeneratorFunctions({ slug }: { slug: string }) {
         <h1 className=" text-4xl bg-gradient-to-r from-yellow-400 via-sky-300 to-pink-400 inline-block text-transparent bg-clip-text">
           /{slug}
         </h1>
+        {/* <div className=" text-sm text-slate-400">Cade Weiskopf</div> */}
       </div>
       <div className=" p-8">
         <p className=" text-lg">
@@ -25,7 +26,7 @@ export default async function JsGeneratorFunctions({ slug }: { slug: string }) {
           <code className=" bg-slate-800 p-1 rounded-lg">done</code> boolean
           indicating function completion and a{" "}
           <code className=" bg-slate-800 p-1 rounded-lg">value</code>.
-          Additionally, data can be passed to a generator's{" "}
+          Additionally, data can be passed to a generator&apos;s{" "}
           <code className=" bg-slate-800 p-1 rounded-lg">next</code> call, but
           data passed into the first{" "}
           <code className=" bg-slate-800 p-1 rounded-lg">next</code> call is not

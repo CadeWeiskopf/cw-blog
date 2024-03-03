@@ -1,5 +1,6 @@
 import { BlogPost } from "./data";
 import JsGeneratorFunctions from "./components/js-generator-functions";
+import Home from "./components/home";
 
 export let blogPosts: BlogPost[];
 setBlogPosts();
@@ -22,6 +23,9 @@ async function getBlogPosts(): Promise<BlogPost[]> {
   const promises = blogPostsT.map(async (blogPost) => {
     if (blogPost.slug === "js-generator-functions") {
       const component = await JsGeneratorFunctions({ ...blogPost });
+      blogPost.component = component;
+    } else if (blogPost.slug === "home") {
+      const component = await Home({ ...blogPost });
       blogPost.component = component;
     }
     return blogPost;

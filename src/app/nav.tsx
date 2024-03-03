@@ -1,48 +1,51 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BlogPost } from "@/app/data/data";
 
 export default function Nav({ posts }: { posts: BlogPost[] }) {
   const navOpenTextRef = useRef<HTMLSpanElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
   const navButtonRef = useRef<HTMLButtonElement>(null);
-  const rightCursor = ["border-r-2", "border-r-slate-300"];
-  const leftCursor = ["border-l-2", "border-l-slate-300"];
-  let isOpen = false;
-  let isCursor = false;
-  let isTyping = false;
-  let cursorInterval: NodeJS.Timeout | undefined;
+  const rightCursor = useMemo(() => ["border-r-2", "border-r-slate-300"], []);
+  const leftCursor = useMemo(() => ["border-l-2", "border-l-slate-300"], []);
+  let isOpen = useRef(false);
+  let isCursor = useRef(false);
+  let isTyping = useRef(false);
+  let cursorInterval = useRef<NodeJS.Timeout>();
 
-  function startCursor(cursorClasses: string[]): NodeJS.Timeout {
-    clearInterval(cursorInterval);
-    if (!navOpenTextRef.current) {
-      throw Error(`no nav text ref`);
-    }
-    isCursor = true;
-    navOpenTextRef.current.classList.remove(...rightCursor, ...leftCursor);
-    navOpenTextRef.current.classList.add(...cursorClasses);
-    return setInterval(() => {
+  const startCursor = useCallback(
+    (cursorClasses: string[]): NodeJS.Timeout => {
+      clearInterval(cursorInterval.current);
       if (!navOpenTextRef.current) {
         throw Error(`no nav text ref`);
       }
-      isCursor = !isCursor;
-      if (isCursor) {
-        navOpenTextRef.current.classList.add(...cursorClasses);
-        return;
-      }
+      isCursor.current = true;
       navOpenTextRef.current.classList.remove(...rightCursor, ...leftCursor);
-    }, 750);
-  }
+      navOpenTextRef.current.classList.add(...cursorClasses);
+      return setInterval(() => {
+        if (!navOpenTextRef.current) {
+          throw Error(`no nav text ref`);
+        }
+        isCursor.current = !isCursor.current;
+        if (isCursor.current) {
+          navOpenTextRef.current.classList.add(...cursorClasses);
+          return;
+        }
+        navOpenTextRef.current.classList.remove(...rightCursor, ...leftCursor);
+      }, 750);
+    },
+    [leftCursor, rightCursor]
+  );
 
   function toggleNav() {
-    if (isTyping) {
+    if (isTyping.current) {
       return;
     }
-    isTyping = true;
+    isTyping.current = true;
 
     function* typeChars() {
-      for (const c of JSON.stringify(isOpen)) {
+      for (const c of JSON.stringify(isOpen.current)) {
         yield c;
       }
     }
@@ -55,16 +58,16 @@ export default function Nav({ posts }: { posts: BlogPost[] }) {
         throw Error(`no nav text ref`);
       }
       navOpenTextRef.current.classList.add("bg-slate-700");
-      cursorInterval = startCursor(leftCursor);
+      cursorInterval.current = startCursor(leftCursor);
       setTimeout(() => {
         if (!navOpenTextRef.current) {
           throw Error(`no nav text ref`);
         }
         navOpenTextRef.current.innerText = "";
         navOpenTextRef.current.classList.remove("bg-slate-700");
-        cursorInterval = startCursor(rightCursor);
+        cursorInterval.current = startCursor(rightCursor);
         setTimeout(() => {
-          isOpen = !isOpen;
+          isOpen.current = !isOpen.current;
           doTypeChars();
         }, 100);
       }, 125);
@@ -75,7 +78,7 @@ export default function Nav({ posts }: { posts: BlogPost[] }) {
         const { value, done } = charGenerator.next();
         if (done) {
           clearInterval(typeCharsInterval);
-          if (isOpen) {
+          if (isOpen.current) {
             navRef.current?.classList.remove("hidden");
             setTimeout(() => {
               navRef.current?.classList.remove("w-0");
@@ -92,7 +95,7 @@ export default function Nav({ posts }: { posts: BlogPost[] }) {
             navButtonRef.current?.classList.add("rounded-lg");
             navButtonRef.current?.classList.remove("rounded-t-lg");
           }
-          isTyping = false;
+          isTyping.current = false;
           return;
         }
         if (!navOpenTextRef.current) {
@@ -104,11 +107,11 @@ export default function Nav({ posts }: { posts: BlogPost[] }) {
   }
 
   useEffect(() => {
-    cursorInterval = startCursor(rightCursor);
+    cursorInterval.current = startCursor(rightCursor);
     return () => {
-      clearInterval(cursorInterval);
+      clearInterval(cursorInterval.current);
     };
-  }, []);
+  }, [rightCursor, startCursor]);
 
   return (
     <div className=" relative">
@@ -128,7 +131,7 @@ export default function Nav({ posts }: { posts: BlogPost[] }) {
           className=" text-sky-600 text-center"
           ref={navOpenTextRef}
         >
-          {JSON.stringify(isOpen)}
+          {JSON.stringify(isOpen.current)}
         </span>
         <br />
         &ensp;<span className=" text-pink-400">{"}"}</span>
@@ -154,7 +157,9 @@ export default function Nav({ posts }: { posts: BlogPost[] }) {
             >
               &ensp;&ensp;&ensp;
               <Link href={post.slug}>
-                <span className=" text-amber-500">"{post.title}"</span>
+                <span className=" text-amber-500">
+                  &quot;{post.title}&quot;
+                </span>
                 {i + 1 < posts.length && (
                   <span className=" text-slate-200">,</span>
                 )}
