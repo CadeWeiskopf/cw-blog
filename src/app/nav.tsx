@@ -38,7 +38,7 @@ export default function Nav({ posts }: { posts: BlogPost[] }) {
     [leftCursor, rightCursor]
   );
 
-  function toggleNav() {
+  const toggleNav = useCallback(() => {
     if (isTyping.current) {
       return;
     }
@@ -104,14 +104,36 @@ export default function Nav({ posts }: { posts: BlogPost[] }) {
         navOpenTextRef.current.innerText += value;
       }, 60);
     }
-  }
+  }, [leftCursor, rightCursor, startCursor]);
 
   useEffect(() => {
     cursorInterval.current = startCursor(rightCursor);
+    const closeOnOutsideClick = (ev: MouseEvent) => {
+      if (!isOpen.current || !ev.target || isTyping.current) {
+        return;
+      }
+      if (!navButtonRef.current) {
+        throw Error("no nav button ref");
+      }
+      if (!navRef.current) {
+        throw Error("no nav ref");
+      }
+      const target = ev.target as HTMLElement;
+      if (
+        target !== navButtonRef.current &&
+        !navButtonRef.current.contains(target) &&
+        target !== navRef.current &&
+        !navRef.current.contains(target)
+      ) {
+        toggleNav();
+      }
+    };
+    document.body.addEventListener("click", closeOnOutsideClick);
     return () => {
       clearInterval(cursorInterval.current);
+      document.body.removeEventListener("click", closeOnOutsideClick);
     };
-  }, [rightCursor, startCursor]);
+  }, [rightCursor, startCursor, toggleNav]);
 
   return (
     <div className=" relative">
