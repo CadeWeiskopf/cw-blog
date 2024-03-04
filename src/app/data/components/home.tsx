@@ -11,14 +11,14 @@ export default async function Home({ slug }: { slug: string }) {
         </h1>
       </div>
       <br />
-      <div className="flex flex-wrap justify-center gap-2">
+      <div className="flex flex-wrap justify-center gap-2 ">
         <Link
           className=""
           href="/js-generator-functions"
         >
           <div
             style={{ textAlign: "left" }}
-            className=" text-sky-300 bg-slate-800 rounded-lg p-2 w-64 "
+            className=" text-sky-300 bg-slate-800 rounded-lg p-2 w-64 bg-gradient-to-bl from-slate-800 to-slate-950"
           >
             <span className=" text-yellow-400">{"{"}</span>
             &ensp;
