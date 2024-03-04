@@ -168,7 +168,7 @@ export default function Nav({ posts }: { posts: BlogPost[] }) {
         <span className=" text-yellow-400">{"{"}</span>
         <br />
         <h2>
-          &ensp;{"posts: "}
+          &ensp;{"links: "}
           <span className=" text-pink-400">{"["}</span>
         </h2>
         <ul>

@@ -1,5 +1,7 @@
 "use server";
 
+import Link from "next/link";
+
 export default async function Home({ slug }: { slug: string }) {
   return (
     <div className="w-full">
@@ -7,17 +9,94 @@ export default async function Home({ slug }: { slug: string }) {
         <h1 className=" text-4xl bg-gradient-to-r from-yellow-400 via-sky-300 to-pink-400 inline-block text-transparent bg-clip-text">
           /{slug}
         </h1>
-        {/* <div className=" text-sm text-slate-400 ">
-          <span className="blur-sm transition-all hover:blur-0 cursor-default">
-            Cade Weiskopf
-          </span>
-        </div> */}
       </div>
-      {/* <div className=" p-8">
-        Hello and welcome to my journey through software engineering. Stay tuned
-        for things to come. Feel free to{" "}
-        <a href="mailto:me@cadew.dev">contact me</a> in the meantime.
-      </div> */}
+      <br />
+      <div className="flex justify-center gap-2">
+        <Link
+          className=""
+          href="/js-generator-functions"
+        >
+          <div
+            style={{ textAlign: "left" }}
+            className=" text-sky-300 bg-slate-800 rounded-lg p-2 w-64 "
+          >
+            <span className=" text-yellow-400">{"{"}</span>
+            &ensp;
+            <span className=" text-amber-500"></span>
+            <br />
+            &ensp;{"title: "}
+            <span className=" text-amber-500">
+              {'"JS Generator Functions"'}
+            </span>
+            <span className="text-slate-200">,</span>
+            <br />
+            &ensp;{"by: "}
+            <span className=" text-amber-500">{'"Cade Weiskopf"'}</span>
+            <span className="text-slate-200">,</span>
+            <br />
+            &ensp;{"created: "}
+            <span className=" text-amber-500">{'"March 3, 2024"'}</span>
+            <br />
+            <span className=" text-yellow-400">{"}"}</span>
+          </div>
+        </Link>
+        <Link
+          className=""
+          href="/js-generator-functions"
+        >
+          <div
+            style={{ textAlign: "left" }}
+            className=" text-sky-300 bg-slate-800 rounded-lg p-2 w-64 "
+          >
+            <span className=" text-yellow-400">{"{"}</span>
+            &ensp;
+            <span className=" text-amber-500"></span>
+            <br />
+            &ensp;{"title: "}
+            <span className=" text-amber-500">
+              {'"JS Generator Functions"'}
+            </span>
+            <span className="text-slate-200">,</span>
+            <br />
+            &ensp;{"by: "}
+            <span className=" text-amber-500">{'"Cade Weiskopf"'}</span>
+            <span className="text-slate-200">,</span>
+            <br />
+            &ensp;{"created: "}
+            <span className=" text-amber-500">{'"March 3, 2024"'}</span>
+            <br />
+            <span className=" text-yellow-400">{"}"}</span>
+          </div>
+        </Link>
+        <Link
+          className=""
+          href="/js-generator-functions"
+        >
+          <div
+            style={{ textAlign: "left" }}
+            className=" text-sky-300 bg-slate-800 rounded-lg p-2 w-64 "
+          >
+            <span className=" text-yellow-400">{"{"}</span>
+            &ensp;
+            <span className=" text-amber-500"></span>
+            <br />
+            &ensp;{"title: "}
+            <span className=" text-amber-500">
+              {'"JS Generator Functions"'}
+            </span>
+            <span className="text-slate-200">,</span>
+            <br />
+            &ensp;{"by: "}
+            <span className=" text-amber-500">{'"Cade Weiskopf"'}</span>
+            <span className="text-slate-200">,</span>
+            <br />
+            &ensp;{"created: "}
+            <span className=" text-amber-500">{'"March 3, 2024"'}</span>
+            <br />
+            <span className=" text-yellow-400">{"}"}</span>
+          </div>
+        </Link>
+      </div>
     </div>
   );
 }
