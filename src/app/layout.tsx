@@ -45,7 +45,7 @@ export default async function RootLayout({
         <main className=" flex justify-center pt-4">
           <div className=" w-full max-w-3xl p-2">{children}</div>
         </main>
-        <footer className=" text-end text-slate-600">
+        <footer className=" sm:text-end text-center text-slate-600">
           All rights reserved, Cade Weiskopf
         </footer>
       </body>
