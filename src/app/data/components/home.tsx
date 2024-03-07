@@ -5,6 +5,7 @@ import Link from "next/link";
 export default async function Home({ slug }: { slug: string }) {
   return (
     <div className="w-full">
+      <br />
       <div className=" text-center w-full">
         <h1 className=" text-4xl bg-gradient-to-r from-yellow-400 via-sky-300 to-pink-400 inline-block text-transparent bg-clip-text">
           /{slug}
