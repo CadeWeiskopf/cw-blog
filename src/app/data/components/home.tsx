@@ -12,6 +12,7 @@ export default async function Home({ slug }: { slug: string }) {
         </h1>
       </div>
       <br />
+      <br />
       <div className="flex flex-wrap justify-center gap-2 ">
         <Link
           className=""

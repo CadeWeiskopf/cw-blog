@@ -13,7 +13,8 @@ export default async function JsGeneratorFunctions({ slug }: { slug: string }) {
         {/* <div className=" text-sm text-slate-400">Cade Weiskopf</div> */}
       </div>
       <br />
-      <div className=" p-8">
+      <br />
+      <div className="pl-8 pr-8">
         <p className=" text-lg">
           JavaScript Generator Functions,{" "}
           <code className=" bg-slate-800 p-1 rounded-lg">function*</code>,
@@ -42,6 +43,7 @@ export default async function JsGeneratorFunctions({ slug }: { slug: string }) {
           </h2>
         </div>
         <br />
+        <br />
         <pre className=" overflow-auto bg-slate-800 pl-4 pr-4 rounded-lg">
           {/* <code dangerouslySetInnerHTML={{ __html: codeHtml }}>{}</code> */}
           <code
@@ -54,6 +56,7 @@ export default async function JsGeneratorFunctions({ slug }: { slug: string }) {
           Now see how this can be adjusted to pass data into the{" "}
           <code className=" bg-slate-800 p-1 rounded-lg">next</code> function:
         </p>
+        <br />
         <br />
         <pre className=" overflow-auto bg-slate-800 pl-4 pr-4 rounded-lg">
           {/* <code dangerouslySetInnerHTML={{ __html: codeHtml }}>{}</code> */}
@@ -68,6 +71,7 @@ export default async function JsGeneratorFunctions({ slug }: { slug: string }) {
             What next?
           </h2>
         </div>
+        <br />
         <br />
         <p className=" text-lg">
           I encourage you to use generator functions for yourself after seeing
@@ -84,6 +88,8 @@ export default async function JsGeneratorFunctions({ slug }: { slug: string }) {
             Thank you and happy coding!
           </h2>
         </div>
+        <br />
+        <br />
       </div>
     </div>
   );
